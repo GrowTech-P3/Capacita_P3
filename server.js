@@ -28,7 +28,10 @@ routesEstados(app)
 routesUsuarioDeficiencia(app)
 routesCurso(app)
 routesDeficiencia(app)
-routesInscricao(app)
+
+// ## Observar
+routesInscricao(app);
+
 
 //ROTA RAIZ
 app.route('/')
