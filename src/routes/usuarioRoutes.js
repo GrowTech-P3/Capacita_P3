@@ -1,13 +1,11 @@
-module.exports = function (app) {
-    const usuario = require('../controller/usuarioController.js')
-    app.route('/usuarios')
-        .get(usuario.listAll)
-    app.route('/usuario-login')
-        .post(usuario.login)
-    app.route('/usuario')
-        .post(usuario.createOne)
-    app.route('/usuario-busca')
-        .post(usuario.findOne)
-    
+const {authenticate} = require("../utils/authToken");
+const {Router} = require("express");
+const routes =  new Router();
+const usuario = require('../controller/usuarioController.js');
 
-}
+routes.get('/usuarios',usuario.listAll);
+routes.get('/usuario-busca',authenticate,usuario.findOne);
+routes.post('/usuario-login',usuario.login);
+routes.post('/usuario',usuario.createOne);
+
+module.exports =  routes ;

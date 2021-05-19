@@ -1,6 +1,10 @@
 const Usuario = require('../models/').Usuario
 const UsuarioPcd = require('../models/').Usuario_pcd
 const Instituicao = require('../models/').Instituicao
+const { token } = require("../config/secretToken");
+const jwt = require('jsonwebtoken');
+
+const bcrypt = require("bcryptjs");
 
 exports.listAll = (req, res) => {
     Usuario.findAll().then(usuarios => {
@@ -10,9 +14,12 @@ exports.listAll = (req, res) => {
     })
 }
 
-exports.createOne = (req, res) => {
-    const {email, senha, tipo, ativo} = req.body
-    Usuario.create({email, senha, tipo, ativo}).then(usuario => {
+exports.createOne = async (req, res) => {
+    const { email, password, tipo, ativo } = req.body
+
+    const senha = await bcrypt.hash(password, 8);
+
+    Usuario.create({ email, senha, tipo, ativo }).then(usuario => {
         res.send(usuario)
     }).catch(err => {
         res.send(err)
@@ -20,53 +27,71 @@ exports.createOne = (req, res) => {
 }
 
 exports.findOne = (req, res) => {
-    const {id} = req.body
+    const { id } = req.body
 
     let response = {
         message: ''
     }
 
     Usuario.findOne({
-        where: {id},
+        where: { id },
         include: [
-            {model: UsuarioPcd},
-            {model: Instituicao}
+            { model: UsuarioPcd },
+            { model: Instituicao }
         ]
     }).then(usuario => {
-        if(usuario == null) {
+        if (usuario == null) {
             response.message = 'Usuário não localizado'
         } else {
             response.message = 'Usuário localizado!'
             response.Usuario = usuario
         }
         res.send(response)
-    }).catch (err => {
+    }).catch(err => {
         res.send(err)
-    }) 
+    })
 
 }
 
-exports.login = (req, res) => {
-    const {email, senha} = req.body
+exports.login = async (req, res) => {
+    const { email, senha } = req.body;
 
     let response = {
         message: '',
     }
 
+    const user = await Usuario.findOne({ where: { email } });
 
-    Usuario.findOne({where: {email}}).then(usuario => {
+    user.checkoutPassword(senha);
+
+    response.message = "Instituição Localizada ";
+    response.instituicao = user;
+    const { id } = user;
+    return res.json({
+        user: {
+            id,
+            email,
+            tipo: user.tipo
+        },
+        token: jwt.sign({ id }, token.secret, {
+            expiresIn: token.expiresIn
+        })
+    });
+    //res.send(response);
+
+    /*Usuario.findOne({where: {email}}).then(usuario => {
         if(usuario == null) {
             response.message = "Usuário não localizado"
             res.send(response)
         } else {
-            if(senha == usuario.senha) {
+            if(usuario.senha == senha)) {
                 response.usuario = usuario
             } else {
                 response.message = "Senha Inválida"
                 res.send(response)
             }
             
-            //TIPO DE USUARIOS: 0=UsuarioPcd, 1=Instituicao, 2=Administrador
+            //TIPO DE USUARIOS: 0=UsuarioPcd, 1=Instituicao, 3=Administrador
             if(usuario.tipo == 2) {
                 response.message = "Usuário Administrador"
                 response.admin = null
@@ -88,6 +113,6 @@ exports.login = (req, res) => {
                 })
             }
         }
-    })
-    
+    })*/
+
 }

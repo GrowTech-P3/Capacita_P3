@@ -1,5 +1,5 @@
-/*
-"development": {
+/* 
+    "development": {
     "username": "root",
     "password": "root",
     "database": "capacita",
