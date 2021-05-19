@@ -1,14 +1,15 @@
 'use strict';
+const bcrypt = require("bcryptjs");
 const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Usuario extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+   
+    checkoutPassword(password){
+      return bcrypt.compare(password, this.senha);
+    }
+    
     static associate(models) {
       Usuario.hasOne(models.Usuario_pcd, {
         foreignKey: 'id_usuario'
@@ -16,10 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       Usuario.hasOne(models.Instituicao, {
         foreignKey: 'id_usuario'
       })
+      Usuario.hasOne(models.Administrador,{
+        foreignKey:'id_usuario'
+      })
       // Usuario.belongsTo(models.Instituicao)
       // Usuario.belongsTo(models.Forum_topico)
       // Usuario.belongsTo(models.Forum_resposta)
     }
+    
   };
   Usuario.init({
     email: DataTypes.STRING,

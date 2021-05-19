@@ -19,9 +19,13 @@ const routesUsuarioDeficiencia  = require('./src/routes/usuarioDeficienciaRoutes
 const routesCurso               = require('./src/routes/cursoRoutes.js')
 const routesDeficiencia         = require('./src/routes/deficienciaRoutes.js')
 const routesInscricao           = require('./src/routes/inscricaoRoutes.js')
+const routesAdministrador =  require('./src/routes/administradorRoutes');
+const routesLogAdministrador = require('./src/routes/logAdministradorRoutes');
 
 //REPASSE DE INSTÂNCIA DO EXPRESS PARA AS ROTAS
-routesUsuario(app)
+app.use(routesUsuario);
+app.use(routesAdministrador);
+app.use(routesLogAdministrador);
 routesUsuarioPcd(app)
 routesInstituicao(app)
 routesEstados(app)
@@ -31,7 +35,6 @@ routesDeficiencia(app)
 
 // ## Observar
 routesInscricao(app);
-
 
 //ROTA RAIZ
 app.route('/')
@@ -44,4 +47,3 @@ const port = process.env.PORT || 3000
 app.listen(port)
 
 console.log("O servidor rodando na porta: ", port)
-
