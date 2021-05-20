@@ -68,9 +68,17 @@ exports.login = async (req, res) => {
     if(!resultPassword){
         return res.status(400).json({message:"Senha inválida"});
     }
+    if(user.ativo == false){
+        return res.status(400).json({message:"Não foi possível realizar o login, Usuário INATIVO!"});
+    }
     const { id } = user;
-
-    let response =  getResponseType(user);
+    const resultUser = {
+        id: user.id,
+        email: user.email,
+        tipo: user.tipo,
+        ativo: user.ativo
+    };
+    let response =  getResponseType(resultUser);
     
     response.Token = jwt.sign({ id }, token.secret, {
         expiresIn: token.expiresIn
