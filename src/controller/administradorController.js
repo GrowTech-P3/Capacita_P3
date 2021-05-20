@@ -13,7 +13,6 @@ const index =  async(req,res) =>{
 }
 const store = async (req,res)=>{
     try{
-
         const {id_usuario,nome} =  req.body;
         const admin = await Administrador.create({id_usuario,nome});
         return res.json(admin);
@@ -55,6 +54,7 @@ const indexById = async (req,res) =>{
             attributes:['id','email','ativo']
         }
     });
+    console.log(admin);
     return res.json(admin);
 }
 

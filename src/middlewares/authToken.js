@@ -10,7 +10,6 @@ const authenticate = async (req, res, next) => {
     const [, resultToken] = authHeader.split(" ");
     try {
         const decoded = await promisify(jwt.verify)(resultToken, token.secret);
-        console.log(token);
         req.codigo_pessoa = decoded.codigo_pessoa;
         return next();
     } catch (err) {
@@ -18,6 +17,4 @@ const authenticate = async (req, res, next) => {
     }
 }
 
-module.exports = {
-    authenticate
-}
+module.exports = { authenticate }

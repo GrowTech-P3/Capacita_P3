@@ -1,4 +1,4 @@
-const {authenticate} = require("../utils/authToken");
+const {authenticate} = require("../middlewares/authToken");
 const {Router} = require("express");
 const routes =  new Router();
 const usuario = require('../controller/usuarioController.js');
