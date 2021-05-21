@@ -61,28 +61,30 @@ exports.login = async (req, res) => {
 
     const user = await Usuario.findOne({ where: { email } });
     if(!user){
-        return res.status(400).json({message:"Email não encontrado"});
+        return res.json({message:"Email não encontrado"});
     }
 
     const resultPassword  = await user.checkoutPassword(senha);
     if(!resultPassword){
-        return res.status(400).json({message:"Senha inválida"});
+        return res.json({message:"Senha inválida"});
     }
     if(user.ativo == false){
-        return res.status(400).json({message:"Não foi possível realizar o login, Usuário INATIVO!"});
+        return res.json({message:"Não foi possível realizar o login, Usuário INATIVO!"});
     }
     const { id } = user;
     const resultUser = {
         id: user.id,
         email: user.email,
         tipo: user.tipo,
-        ativo: user.ativo
+        ativo: user.ativo,
+        Token:  jwt.sign({ id }, token.secret, {
+            expiresIn: token.expiresIn
+        })
     };
     let response =  getResponseType(resultUser);
     
-    response.Token = jwt.sign({ id }, token.secret, {
-        expiresIn: token.expiresIn
-    });
+    response.Token = resultUser.Token;
+    
 
     return res.send(response);
 }

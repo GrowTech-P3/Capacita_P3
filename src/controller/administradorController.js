@@ -6,11 +6,11 @@ const index =  async(req,res) =>{
         include:{
             model: Usuario,
             attributes:['id','email','ativo']
-        } 
-        
+        }     
     });
     return res.json(allAdmin);
 }
+
 const store = async (req,res)=>{
     try{
         const {id_usuario,nome} =  req.body;
@@ -20,12 +20,13 @@ const store = async (req,res)=>{
         return res.json(err);
     }
 }
+
 const update = async (req,res) => {
     try{
         const {id_administrador,nome} = req.body;
         const admin = await Administrador.findByPk(id_administrador);
         if(!admin){
-            return res.status(400).json({message:"Usuário não encontrado!"});
+            return res.json({message:"Usuário não encontrado!"});
         }
         await admin.update({nome});
         return res.json({message:"Administrador Atualizado"});
@@ -38,7 +39,7 @@ const remove = async (req,res)=>{
     const {id_administrador} = req.body;
     const user = await Administrador.findOne({where:{id_administrador},include:Usuario});
     if(!user){
-        return res.status(400).json({message:"Usuário não encontrado!"});
+        return res.json({message:"Usuário não encontrado!"});
     }
     const modify = await Usuario.findOne({where:user.id_usuario});
     await modify.update({ativo:false});
@@ -54,7 +55,6 @@ const indexById = async (req,res) =>{
             attributes:['id','email','ativo']
         }
     });
-    console.log(admin);
     return res.json(admin);
 }
 
