@@ -5,7 +5,7 @@ const { token } = require("../config/secretToken");
 const authenticate = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-        return res.status(400).json("Token is not defined");
+        return res.json({message:"Token is not defined"});
     }
     const [, resultToken] = authHeader.split(" ");
     try {
@@ -13,7 +13,7 @@ const authenticate = async (req, res, next) => {
         req.codigo_pessoa = decoded.codigo_pessoa;
         return next();
     } catch (err) {
-        return res.json(err);
+        return res.json({message:"Token inválido"});
     }
 }
 
