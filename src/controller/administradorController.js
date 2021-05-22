@@ -1,5 +1,6 @@
 const Administrador = require("../models/").Administrador;
 const Usuario = require("../models/").Usuario;
+const bcrypt = require("bcryptjs");
 
 const index =  async(req,res) =>{
     const allAdmin = await Administrador.findAll({
@@ -13,11 +14,24 @@ const index =  async(req,res) =>{
 
 const store = async (req,res)=>{
     try{
-        const {id_usuario,nome} =  req.body;
-        const admin = await Administrador.create({id_usuario,nome});
-        return res.json(admin);
+        const {email,password,nome} =  req.body;
+        const ativo = true;
+        const tipo = 3;
+        const userExists = await Usuario.findOne({where:{email}});
+        if(userExists){
+            return res.json({message:"Email já existe!"});
+        }
+        const senha = await bcrypt.hash(password,8);
+        const user = await Usuario.create({email,senha,tipo,ativo}); 
+        const admin = await Administrador.create({id_usuario:user.id,nome});
+        const response = {
+            message:'Administrador cadastradoc com sucesso!',
+            admin
+            
+        }
+        return res.json(response);
     }catch(err){
-        return res.json(err);
+        return res.json(err.message);
     }
 }
 
