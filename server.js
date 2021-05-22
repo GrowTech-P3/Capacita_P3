@@ -26,7 +26,7 @@ const routesLogAdministrador = require('./src/routes/logAdministradorRoutes');
 app.use(routesUsuario);
 app.use(routesAdministrador);
 app.use(routesLogAdministrador);
-routesUsuarioPcd(app)
+app.use(routesUsuarioPcd);
 routesInstituicao(app)
 routesEstados(app)
 routesUsuarioDeficiencia(app)

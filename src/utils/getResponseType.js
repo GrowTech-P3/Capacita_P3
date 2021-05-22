@@ -5,7 +5,7 @@ const getResponseType = (user) => {
 
     if(user.tipo == 0){
         response.message = "Usuario Localizado";
-        response.usuario = user;
+        response.usuarioPcd = user;
     }
     if(user.tipo == 1){
         response.message = "Instituição Localizada";
