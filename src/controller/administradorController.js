@@ -25,9 +25,8 @@ const store = async (req,res)=>{
         const user = await Usuario.create({email,senha,tipo,ativo}); 
         const admin = await Administrador.create({id_usuario:user.id,nome});
         const response = {
-            message:'Administrador cadastradoc com sucesso!',
+            message:'Administrador cadastrado com sucesso!',
             admin
-            
         }
         return res.json(response);
     }catch(err){

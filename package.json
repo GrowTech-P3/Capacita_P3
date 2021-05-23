@@ -1,7 +1,7 @@
 {
   "name": "capacita_server",
   "version": "1.0.0",
-  "description": "",
+  "description": "<h1 align=\"center\">\r     <img src=\"https://i.ibb.co/bRKDwM1/Logo-capacita.png\">\r </h1>",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,5 +23,13 @@
   "devDependencies": {
     "nodemon": "^2.0.4",
     "sequelize-cli": "^6.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrowTech-P3/Capacita_P3_BackEnd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GrowTech-P3/Capacita_P3_BackEnd/issues"
+  },
+  "homepage": "https://github.com/GrowTech-P3/Capacita_P3_BackEnd#readme"
 }

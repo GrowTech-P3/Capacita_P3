@@ -44,7 +44,7 @@ exports.searchAll = (req, res) => {
 }
 
 exports.createOne = async (req, res) => {
-    let {nome, telefone, endereco, numero, bairro, cidade, id_estado, cep, cnpj, email, password} = req.body
+    let {nome, telefone, endereco, numero, bairro, cidade, id_estado, cep, cnpj, email, password,descricao} = req.body
     let response = {
         message: '',
         liberado: false
@@ -65,6 +65,7 @@ exports.createOne = async (req, res) => {
         bairro,
         cidade,
         id_estado,
+        descricao,
         id_usuario:user.id,
         cep,
         cnpj,
