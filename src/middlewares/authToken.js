@@ -8,7 +8,7 @@ const authenticate = async (req, res, next) => {
     if (!authHeader) {
         return res.json({message:"Token is not defined"});
     }
-    const [resultToken] = authHeader.split(" ");
+    const [, resultToken] = authHeader.split(" ");
     try {
         const decoded = await promisify(jwt.verify)(resultToken, token.secret);
         req.codigo_pessoa = decoded.codigo_pessoa;
