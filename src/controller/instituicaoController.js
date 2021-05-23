@@ -23,10 +23,10 @@ exports.listAll = (req, res) => {
 }
 
 exports.searchAll = (req, res) => {
-    const {pesquisa} = req.body
+    const {nome} = req.body
     Instituicao.findAll ({
         where: {
-            nome: {[Op.substring]: pesquisa}
+            nome: {[Op.substring]: nome}
         },
         include:[
             {
@@ -77,4 +77,33 @@ exports.createOne = async (req, res) => {
         liberado:true
     }
     return res.send(response);
+}
+
+exports.findOne = async (req, res) => {
+    const {id} = req.body
+
+    let response = {
+        message: ''
+    }
+
+    try {
+        const instituicao = await Instituicao.findOne({
+            where: { id },
+            include:[
+                    {model: Usuario}
+            ]
+        })
+
+        if(instituicao) {
+            response.message = "Institução Localizada!"
+            response.instituicao = instituicao
+            response.instituicao.Usuario.senha = "***"
+        } else {
+            response.message = "Instituição Não Localizada!"
+        }
+
+    } catch (err) {
+        res.send(err)
+    }
+    res.send(response);
 }

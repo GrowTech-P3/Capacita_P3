@@ -4,6 +4,8 @@ module.exports = function (app) {
     app.route('/instituicao')
         .get(authenticate,instituicao.listAll)
         .post(authenticate,instituicao.createOne)
+    app.route('/busca-instituicao')
+        .post(authenticate,instituicao.findOne)
     app.route('/instituicao-pesquisa')
         .post(authenticate,instituicao.searchAll)
 }

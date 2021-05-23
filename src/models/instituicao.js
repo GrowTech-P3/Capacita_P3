@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       Instituicao.belongsTo(models.Usuario_pcd, {
         foreignKey: 'id_usuario'
       })
+      Instituicao.belongsTo(models.Usuario, {
+        foreignKey: 'id_usuario'
+      })
     }
   };
   Instituicao.init({
