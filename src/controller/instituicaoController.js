@@ -134,10 +134,6 @@ exports.findOne = async (req, res) => {
 exports.searchAllDisable = async (req, res) => {
     const {id, nome} = req.body
 
-    let response = {
-        message: ''
-    }
-
     try {
         const instituicao = await Instituicao.findAll({
             where: { 
@@ -148,12 +144,7 @@ exports.searchAllDisable = async (req, res) => {
             }
         })
 
-        if(instituicao) {
-            response.message = "Instituções Localizadas!"
-            response.instituicao = instituicao
-        } else {
-            response.message = "Instituições Não Localizadas!"
-        }
+        res.send(instituicao);
 
     } catch (err) {
         res.send(err)
@@ -165,24 +156,14 @@ exports.searchAllDisable = async (req, res) => {
 //LIBERADAS PELOS ADMINISTRADORES
 exports.listAllDisable = async (req, res) => {
 
-    let response = {
-        message: ''
-    }
-
     try {
         const instituicao = await Instituicao.findAll({
             where: { ativo: 0}
         })
 
-        if(instituicao) {
-            response.message = "Instituções Localizadas!"
-            response.instituicao = instituicao
-        } else {
-            response.message = "Instituição Não Localizada!"
-        }
+        res.send(instituicao);
 
     } catch (err) {
         res.send(err)
     }
-    res.send(response);
 }
