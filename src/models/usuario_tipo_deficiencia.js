@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+
     }
   };
   Usuario_tipo_deficiencia.init({
-    id_usuario_pcd: { primaryKey: true, type: DataTypes.INTEGER },
+    id_usuario_pcd: { primaryKey: true, type: DataTypes.INTEGER, },
     id_tipo_deficiencia: { primaryKey: true, type: DataTypes.INTEGER }
   }, {
     sequelize,

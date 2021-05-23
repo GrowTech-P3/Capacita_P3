@@ -59,7 +59,7 @@ exports.findOne = (req, res) => {
 exports.login = async (req, res) => {
     const { email, senha } = req.body;
 
-    const user = await Usuario.findOne({ where: { email } });
+    const user = await Usuario.findOne({ where: { email }});
     if(!user){
         return res.json({message:"Email não encontrado"});
     }
@@ -82,9 +82,5 @@ exports.login = async (req, res) => {
         })
     };
     let response =  getResponseType(resultUser);
-    
-    response.Token = resultUser.Token;
-    
-
     return res.send(response);
 }
