@@ -8,4 +8,8 @@ module.exports = function (app) {
         .post(authenticate,instituicao.findOne)
     app.route('/instituicao-pesquisa')
         .post(authenticate,instituicao.searchAll)
+    app.route('/busca-instituicao-inativa')
+        .get(authenticate,instituicao.listAllDisable)
+        .post(authenticate,instituicao.searchAllDisable)
+
 }

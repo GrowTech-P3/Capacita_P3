@@ -107,3 +107,61 @@ exports.findOne = async (req, res) => {
     }
     res.send(response);
 }
+
+//LOCALIZA INSTITUIÇÕES CADASTRADAS QUE AINDA NÃO FORAM
+//LIBERADAS PELOS ADMINISTRADORES
+exports.searchAllDisable = async (req, res) => {
+    const {id} = req.body
+
+    let response = {
+        message: ''
+    }
+
+    try {
+        const instituicao = await Instituicao.findAll({
+            where: { 
+                 [ Op.and ]: [
+                    { id },
+                    {ativo: 0}
+                ] 
+            }
+        })
+
+        if(instituicao) {
+            response.message = "Instituções Localizadas!"
+            response.instituicao = instituicao
+        } else {
+            response.message = "Instituições Não Localizadas!"
+        }
+
+    } catch (err) {
+        res.send(err)
+    }
+    res.send(response);
+}
+
+//LOCALIZA INSTITUIÇÕES CADASTRADAS QUE AINDA NÃO FORAM
+//LIBERADAS PELOS ADMINISTRADORES
+exports.listAllDisable = async (req, res) => {
+
+    let response = {
+        message: ''
+    }
+
+    try {
+        const instituicao = await Instituicao.findAll({
+            where: { ativo: 0}
+        })
+
+        if(instituicao) {
+            response.message = "Instituções Localizadas!"
+            response.instituicao = instituicao
+        } else {
+            response.message = "Instituição Não Localizada!"
+        }
+
+    } catch (err) {
+        res.send(err)
+    }
+    res.send(response);
+}
