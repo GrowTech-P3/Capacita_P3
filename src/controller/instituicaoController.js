@@ -79,6 +79,27 @@ exports.createOne = async (req, res) => {
     return res.send(response);
 }
 
+exports.autorizationInst = async (req, res) => {
+    let {id} = req.body
+    let response = {
+        message: '',
+    }
+    const ativo=true;
+    const instituicao = await Instituicao.update({ ativo }, {
+        where: {
+            id
+        }
+    });
+
+    if(instituicao == 1) {
+        response.message = "Instituição autorizada com sucesso!"
+    } else {
+        response.message = "Instituição não localizada!"
+    }
+    
+    return res.send(response);
+}
+
 exports.findOne = async (req, res) => {
     const {id} = req.body
 

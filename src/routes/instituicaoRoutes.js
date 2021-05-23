@@ -11,5 +11,7 @@ module.exports = function (app) {
     app.route('/busca-instituicao-inativa')
         .get(authenticate,instituicao.listAllDisable)
         .post(authenticate,instituicao.searchAllDisable)
+    app.route('/instituicao-liberacao')
+        .post(authenticate,instituicao.autorizationInst)
 
 }
