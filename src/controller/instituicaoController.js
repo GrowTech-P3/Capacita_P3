@@ -111,7 +111,7 @@ exports.findOne = async (req, res) => {
 //LOCALIZA INSTITUIÇÕES CADASTRADAS QUE AINDA NÃO FORAM
 //LIBERADAS PELOS ADMINISTRADORES
 exports.searchAllDisable = async (req, res) => {
-    const {id} = req.body
+    const {id, nome} = req.body
 
     let response = {
         message: ''
@@ -121,7 +121,7 @@ exports.searchAllDisable = async (req, res) => {
         const instituicao = await Instituicao.findAll({
             where: { 
                  [ Op.and ]: [
-                    { id },
+                    {nome: {[Op.substring]: nome}},
                     {ativo: 0}
                 ] 
             }
