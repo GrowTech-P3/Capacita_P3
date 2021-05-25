@@ -50,7 +50,7 @@ exports.createOne = async (req, res) => {
         liberado: false
     }
     const tipo=1;
-    const ativo=true;
+    const ativo=false;
     const senha = await bcrypt.hash(password,8);
     const emailExists =  await Usuario.findOne({where:{email}});
     if(emailExists){
