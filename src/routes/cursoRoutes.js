@@ -1,8 +1,17 @@
 module.exports = function (app) {
     const curso = require('../controller/cursoController.js')
+    const {authenticate} = require("../middlewares/authToken")
     app.route('/curso')
         .get(curso.listAll)
         .post(curso.createOne)
+    app.route('/buscar-curso')
+        .post(authenticate,curso.findOne)
     app.route('/curso-pesquisa')
         .post(curso.searchAll)
+    app.route('/curso-pesquisa-inativo')
+        .post(authenticate,curso.searchAllDisable)
+    app.route('/curso-inativo')
+        .get(authenticate,curso.listAllDisable)
+    app.route('/curso-liberacao')
+        .post(authenticate,curso.autorizationCurso)
 }

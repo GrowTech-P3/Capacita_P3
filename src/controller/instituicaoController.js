@@ -79,6 +79,8 @@ exports.createOne = async (req, res) => {
     return res.send(response);
 }
 
+
+//METODO PARA AUTORIZAR UMA INSTITUICAO ATIVAR
 exports.autorizationInst = async (req, res) => {
     let {id} = req.body
     let response = {
@@ -149,7 +151,6 @@ exports.searchAllDisable = async (req, res) => {
     } catch (err) {
         res.send(err)
     }
-    res.send(response);
 }
 
 //LOCALIZA INSTITUIÇÕES CADASTRADAS QUE AINDA NÃO FORAM
