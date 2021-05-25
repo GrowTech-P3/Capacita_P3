@@ -44,3 +44,99 @@ exports.createOne = (req, res) => {
             res.send(err)
         })
 }
+
+exports.findOne = async (req, res) => {
+    const {id} = req.body
+
+    let response = {
+        message: ''
+    }
+
+    try {
+        const curso = await Curso.findOne({
+            where: { id },
+            include:[
+                    {model: Instituicao},
+                    {model: Deficiencia}
+            ]
+        })
+
+        if(curso) {
+            response.message = "Curso Localizado!"
+            response.curso = curso;
+        } else {
+            response.message = "Curso Não Localizado!"
+        }
+
+    } catch (err) {
+        res.send(err)
+    }
+    res.send(response);
+}
+
+//LOCALIZA CURSOS CADASTRADOS QUE AINDA NÃO FORAM
+//LIBERADAS PELOS ADMINISTRADORES
+exports.listAllDisable = async (req, res) => {
+
+    try {
+        const curso = await Curso.findAll({
+            where: { ativo: 0},
+            include: [
+                { model: Instituicao },
+                { model: Deficiencia }
+            ]
+        })
+
+        res.send(curso)
+
+    } catch (err) {
+        res.send(err)
+    }
+}
+
+//LOCALIZA CURSOS CADASTRADOS QUE AINDA NÃO FORAM
+//LIBERADAS PELOS ADMINISTRADORES
+exports.searchAllDisable = async (req, res) => {
+    const { nome_curso } = req.body
+
+    try {
+        const curso = await Curso.findAll({
+            where: { 
+                 [ Op.and ]: [
+                    {nome_curso: {[Op.substring]: nome_curso}},
+                    {ativo: 0}
+                ] 
+            },
+            include: [
+                { model: Instituicao },
+                { model: Deficiencia }
+            ]
+        })
+
+        res.send(curso);
+
+    } catch (err) {
+        res.send(err)
+    }
+}
+
+exports.autorizationCurso = async (req, res) => {
+    let {id} = req.body
+    let response = {
+        message: '',
+    }
+    const ativo=true;
+    const curso = await Curso.update({ ativo }, {
+        where: {
+            id
+        }
+    });
+
+    if(curso == 1) {
+        response.message = "Curso autorizado com sucesso!"
+    } else {
+        response.message = "Curso não localizado!"
+    }
+    
+    return res.send(response);
+}
