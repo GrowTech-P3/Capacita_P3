@@ -4,7 +4,7 @@ const { token } = require("../config/secretToken");
 
 const authenticate = async (req, res, next) => {
     const authHeader = req.headers.authorization;
-    console.log(authHeader);
+    //console.log(authHeader);
     if (!authHeader) {
         return res.json({message:"Token is not defined"});
     }

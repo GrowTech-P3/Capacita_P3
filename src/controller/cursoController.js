@@ -120,6 +120,27 @@ exports.searchAllDisable = async (req, res) => {
     }
 }
 
+//LOCALIZA CURSOS CADASTRADOS QUE AINDA NÃO FORAM
+//LIBERADAS PELOS ADMINISTRADORES
+exports.searchAllDisableInst = async (req, res) => {
+    const { nome } = req.body
+
+    try {
+        const curso = await Curso.findAll({
+            where: {ativo: false},
+            include: [
+                { model: Instituicao, where: {nome: {[Op.substring]: nome}} },
+                { model: Deficiencia }
+            ]
+        })
+
+        res.send(curso);
+
+    } catch (err) {
+        res.send(err)
+    }
+}
+
 exports.autorizationCurso = async (req, res) => {
     let {id} = req.body
     let response = {

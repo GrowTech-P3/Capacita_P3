@@ -10,6 +10,8 @@ module.exports = function (app) {
         .post(curso.searchAll)
     app.route('/curso-pesquisa-inativo')
         .post(authenticate,curso.searchAllDisable)
+    app.route('/curso-inst-pesquisa-inativo')
+        .post(authenticate,curso.searchAllDisableInst)
     app.route('/curso-inativo')
         .get(authenticate,curso.listAllDisable)
     app.route('/curso-liberacao')
