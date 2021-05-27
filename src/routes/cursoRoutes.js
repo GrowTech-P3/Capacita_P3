@@ -11,7 +11,7 @@ module.exports = function (app) {
     app.route('/curso-pesquisa-inativo')
         .post(authenticate,curso.searchAllDisable)
     app.route('/curso-inst-pesquisa-inativo')
-        .post(authenticate,curso.searchAllDisableInst)
+        .post(authenticate,curso.searchAllDisableFilter)
     app.route('/curso-inativo')
         .get(authenticate,curso.listAllDisable)
     app.route('/curso-liberacao')
