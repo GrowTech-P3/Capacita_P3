@@ -2,6 +2,7 @@ const Instituicao = require('../models').Instituicao
 const Usuario = require('../models').Usuario
 const Curso = require('../models').Curso 
 const Tipo_deficiencia = require('../models').Tipo_deficiencia
+const Estado = require('../models').Estado
 const bcrypt = require("bcryptjs");
 const { Op } = require("sequelize");
 
@@ -22,19 +23,18 @@ exports.listAll = (req, res) => {
     })
 }
 
+//FILTRO PESQUISAR POR INSTITUICOES (NOME INSTITUICAO, ESTADO-LABEL, DATA-CREATEDAT)
 exports.searchAll = (req, res) => {
-    const {nome} = req.body
+    const {nome, label, createdAt} = req.body
     Instituicao.findAll ({
         where: {
-            nome: {[Op.substring]: nome}
+            [Op.and]: [
+                {nome: {[Op.substring]: nome}},
+                {createdAt: {[Op.substring]: createdAt}}
+            ] 
         },
         include:[
-            {
-                model: Curso, 
-                include: [
-                    {model: Tipo_deficiencia},
-                ] 
-            }
+            { model: Estado, where: {label: {[Op.substring]: label}}}
         ] 
     }).then(instituicao => {
         res.send(instituicao)
