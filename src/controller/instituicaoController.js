@@ -25,12 +25,12 @@ exports.listAll = (req, res) => {
 
 //FILTRO PESQUISAR POR INSTITUICOES (NOME INSTITUICAO, ESTADO-LABEL, DATA-CREATEDAT)
 exports.searchAll = (req, res) => {
-    const {nome, label, createdAt} = req.body
+    const {nome, label, createdAt, createdAt2} = req.body
     Instituicao.findAll ({
         where: {
             [Op.and]: [
                 {nome: {[Op.substring]: nome}},
-                {createdAt: {[Op.substring]: createdAt}}
+                {createdAt: {[Op.between] : [createdAt, createdAt2]}}
             ] 
         },
         include:[
