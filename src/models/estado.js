@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Estado.belongsTo(models.Usuario_pcd)
-      // Estado.hasOne(models.Instituicao)
+      Estado.hasMany(models.Instituicao, {
+        foreignKey: 'id_estado'
+      })
     }
   };
   Estado.init({
