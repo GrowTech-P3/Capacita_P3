@@ -49,26 +49,40 @@ const update = async (req,res) => {
 }
 
 const remove = async (req,res)=>{
-    const {id_administrador} = req.body;
-    const user = await Administrador.findOne({where:{id_administrador},include:Usuario});
+    const {email} = req.body;
+    console.log(email);
+    const user = await Usuario.findOne({where:{email}});
     if(!user){
-        return res.json({message:"Usuário não encontrado!"});
+        return res.json({message:"Administrador não encontrado!"});
     }
-    const modify = await Usuario.findOne({where:user.id_usuario});
-    await modify.update({ativo:false});
-    return res.json({message:"Usuário deletado"});
+    if(user.tipo != 3){
+        return res.json({message:"Usuário não é um administrador!"})
+    }
+    if(user.ativo == false){
+        return res.json({message:"Administrador já foi removido!"})
+    }
+    await user.update({ativo:false});
+    return res.json({message:"Administrador deletado"});
 }
 
 const indexById = async (req,res) =>{
-    const {id_administrador} =  req.body;
-    const admin = await Administrador.findOne({
-        where:id_administrador,
+    const {email} =  req.params;
+    const admin = await Usuario.findOne({
+        where:{email},
         include:{
-            model:Usuario,
-            attributes:['id','email','ativo']
+            model:Administrador
         }
     });
-    return res.json(admin);
+    console.log(admin);
+    const result = {
+        Usuario:{
+            email:admin.email
+        },
+        admin:{
+            nome:admin.Administrador.nome
+        }
+    }
+    return res.json(result);
 }
 
 module.exports = {
