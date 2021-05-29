@@ -29,7 +29,7 @@ exports.findOne = async (req, res) => {
     let deficiencia = [];
 
     usuarioPCD.Tipo_deficiencia.forEach(index => {
-        deficiencia.push(index.nome);
+        deficiencia.push(index.id);
     })
     const response = {
         message:"Usuário PCD localizado",
@@ -45,7 +45,7 @@ exports.findOne = async (req, res) => {
             cep: usuarioPCD.cep,
             cpf: usuarioPCD.cpf,
             ativo:usuarioPCD.ativo,
-            deficiencias:deficiencia
+            deficiencia
         },
         usuario:{
             email:usuarioPCD.Usuario.email,
@@ -114,4 +114,33 @@ exports.createOne = async (req, res) => {
         usuarioPcd
     }
     return res.send(response);
+}
+
+
+exports.remove = async (req,res) => {
+    const {cpf} = req.body;
+    const cpfFormat = cpf.split(",");
+    const format = `${cpfFormat[0]}.${cpfFormat[1]}.${cpfFormat[2]}`
+
+    const userPCD = await UsuarioPcd.findOne({where:{cpf:format}});
+    if(!userPCD){
+        return res.send({message:"Usuário não encontado!"});
+    }
+    const user = await Usuario.findOne({where:{id:userPCD.id_usuario}});
+    await userPCD.update({ativo:false});
+    await user.update({ativo:false});
+    return res.send({message:"Usuário deletado!"});
+}
+
+exports.update = async (req,res) => {
+    const {nome,endereco,cidade,bairro,id_estado,cpf,telefone,cep,email,numero,ativo} = req.body;
+    const cpfFormat = cpf.split(",");
+    const format = `${cpfFormat[0]}.${cpfFormat[1]}.${cpfFormat[2]}`
+    const userPCD = await UsuarioPcd.findOne({where:{cpf:format}});
+    if(!userPCD){
+        return res.send({message:"Usuário não encontrado"});
+    }
+    await userPCD.update({nome,endereco,cidade,bairro,id_estado,cpf:format,telefone,cep,numero,ativo});
+    await Usuario.update({email,ativo},{where:{id:userPCD.id_usuario}});
+    return res.send({message:"Usuário atualizado!"});
 }
