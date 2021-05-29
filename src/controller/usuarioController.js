@@ -30,7 +30,7 @@ exports.createOne = async (req, res) => {
 }
 
 exports.findOne = (req, res) => {
-    const { id } = req.body
+    const {id} = req.body
 
     let response = {
         message: ''
