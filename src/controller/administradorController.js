@@ -36,21 +36,30 @@ const store = async (req,res)=>{
 
 const update = async (req,res) => {
     try{
-        const {id_administrador,nome} = req.body;
-        const admin = await Administrador.findByPk(id_administrador);
+        const {email,nome,ativo} = req.body;
+        const admin = await Usuario.findOne({where:{email}});
         if(!admin){
             return res.json({message:"Usuário não encontrado!"});
         }
-        await admin.update({nome});
+        const resultupdt = await admin.update({email,ativo});
+        const resultAdmin = await Administrador.findOne({where:{id_usuario:resultupdt.id}});
+        await resultAdmin.update({nome});
         return res.json({message:"Administrador Atualizado"});
     }catch(err){
         return res.json(err);
     }
 }
 
+const updatePassword = async (req,res) =>{
+    const {email,password} =  req.body;
+    const user = await Usuario.findOne({where:{email}});
+    const senha = await bcrypt.hash(password,8);
+    await user.update({senha});
+    return res.send({message:"Senha Atualizada!"});
+}
+
 const remove = async (req,res)=>{
     const {email} = req.body;
-    console.log(email);
     const user = await Usuario.findOne({where:{email}});
     if(!user){
         return res.json({message:"Administrador não encontrado!"});
@@ -72,11 +81,11 @@ const indexById = async (req,res) =>{
         include:{
             model:Administrador
         }
-    });
-    console.log(admin);
+    });  
     const result = {
         Usuario:{
-            email:admin.email
+            email:admin.email,
+            ativo:admin.ativo
         },
         admin:{
             nome:admin.Administrador.nome
@@ -90,5 +99,6 @@ module.exports = {
     update,
     index,
     indexById,
-    remove
+    remove,
+    updatePassword
 }
