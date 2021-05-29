@@ -30,7 +30,8 @@ exports.searchAll = (req, res) => {
         where: {
             [Op.and]: [
                 {nome: {[Op.substring]: nome}},
-                {createdAt: {[Op.between] : [createdAt, createdAt2]}}
+                {createdAt: {[Op.between] : [createdAt, createdAt2]}},
+                {ativo: false}
             ] 
         },
         include:[
