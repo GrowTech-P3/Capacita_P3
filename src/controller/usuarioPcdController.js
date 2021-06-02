@@ -121,7 +121,6 @@ exports.remove = async (req,res) => {
     const {cpf} = req.body;
     const cpfFormat = cpf.split(",");
     const format = `${cpfFormat[0]}.${cpfFormat[1]}.${cpfFormat[2]}`
-
     const userPCD = await UsuarioPcd.findOne({where:{cpf:format}});
     if(!userPCD){
         return res.send({message:"Usuário não encontado!"});

@@ -50,6 +50,8 @@ exports.createOne = async (req, res) => {
         message: '',
         liberado: false
     }
+    const cnpjFormat = cnpj.split(",");
+    const format = `${cnpjFormat[0]}.${cnpjFormat[1]}.${cnpjFormat[2]}`
     const tipo=1;
     const ativo=false;
     const senha = await bcrypt.hash(password,8);
@@ -69,7 +71,7 @@ exports.createOne = async (req, res) => {
         descricao,
         id_usuario:user.id,
         cep,
-        cnpj,
+        cnpj:format,
         ativo
     });
     response = {
@@ -101,6 +103,64 @@ exports.autorizationInst = async (req, res) => {
     }
     
     return res.send(response);
+}
+
+exports.findByCnpj = async (req,res)=>{
+    const {cnpj} = req.body;
+    const cnpjFormat = cnpj.split(",");
+    const format = `${cnpjFormat[0]}.${cnpjFormat[1]}.${cnpjFormat[2]}`
+    const findInst = await Instituicao.findOne({
+        where:{cnpj:format},
+        include:Usuario
+    });
+    if(!findInst){
+        return res.send({message:"Instituicão não encontrada"});
+    }
+    const result = {
+        message:'Instituição localizada',
+        instituicao:{
+            nome:findInst.nome,
+            telefone:findInst.telefone,
+            endereco:findInst.endereco,
+            numero:findInst.numero,
+            bairro:findInst.bairro,
+            cidade:findInst.cidade,
+            cep:findInst.cep,
+            cnpj:findInst.cnpj,
+            descricao:findInst.descricao,
+            id_estado:findInst.id_estado,
+        },
+        usuario:{
+            email:findInst.Usuario.email,
+            ativo:findInst.Usuario.ativo
+        }
+    }
+    return res.send (result)  
+}
+
+exports.remove = async (req,res)=>{
+    const {cnpj} = req.body;
+    const cnpjFormat =  cnpj.split(',');
+    const format = `${cnpjFormat[0]}.${cnpjFormat[1]}.${cnpjFormat[2]}`;
+    const findInst = await Instituicao.findOne({where:{cnpj:format}});
+    if(!findInst){
+        return req.send({message:"Instituição não localizada!"});
+    }
+    await Usuario.update({ativo:false},{where:{id:findInst.id_usuario}});
+    return res.send({message:"Instituição removida com sucesso!"});
+}
+
+exports.update = async (req,res) =>{
+    const {nome,telefone,endereco,numero,bairro,cidade,cep,cnpj,descricao,email,ativo} = req.body;
+    const cnpjFormat =  cnpj.split(',');
+    const format = `${cnpjFormat[0]}.${cnpjFormat[1]}.${cnpjFormat[2]}`;
+    const findInst = await Instituicao.findOne({where:{cnpj:format}});
+    if(!findInst){
+        return res.send({message:"Instituição não localizada!"});
+    }
+    await findInst.update({nome,telefone,endereco,numero,bairro,cidade,cep,descricao});
+    await Usuario.update({email,ativo},{where:{id:findInst.id_usuario}});
+    return res.send({message:"Instituição atualizada com sucesso!"});
 }
 
 exports.findOne = async (req, res) => {
