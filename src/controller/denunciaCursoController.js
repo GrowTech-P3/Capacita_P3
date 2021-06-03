@@ -14,6 +14,7 @@ exports.listAll = async (req, res) => {
             { model: Usuario_pcd }
         ]
     })
+    return res.send(denuncias);
 }
 
 exports.listAllOpen = async (req, res) => {

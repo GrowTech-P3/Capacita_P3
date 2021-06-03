@@ -11,6 +11,8 @@ module.exports = function (app) {
     app.route('/instituicao/cnpj')
         .post(authenticate,instituicao.findByCnpj)
         .delete(authenticate,instituicao.remove)
+    app.route('/instituicao/reset')
+        .post(authenticate,instituicao.resetPassword)
     app.route('/instituicao/update')
         .post(authenticate,instituicao.update)
     app.route('/instituicao-inativa')

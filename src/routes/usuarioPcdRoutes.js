@@ -9,5 +9,6 @@ routes.post('/usuarioPcd',authenticate,usuarioPcd.createOne);
 routes.post('/buscar-usuariopcd',authenticate,usuarioPcd.findOne);
 routes.delete('/usuariopcd',authenticate,usuarioPcd.remove);
 routes.post('/usuariopcd/update',authenticate,usuarioPcd.update);
+routes.post('/usuariopcd/reset',authenticate,usuarioPcd.resetPassword);
 
 module.exports = routes;
