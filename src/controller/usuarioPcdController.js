@@ -143,3 +143,17 @@ exports.update = async (req,res) => {
     await Usuario.update({email,ativo},{where:{id:userPCD.id_usuario}});
     return res.send({message:"Usuário atualizado!"});
 }
+
+
+exports.resetPassword = async (req,res) =>{
+    const {cpf} = req.body;
+    const cpfFormat = cpf.split(",");
+    const format = `${cpfFormat[0]}.${cpfFormat[1]}.${cpfFormat[2]}`
+    const userPCD = await UsuarioPcd.findOne({where:{cpf:format}});
+    if(!userPCD){
+        return res.send({message:"Usuário não localizado!"});
+    }
+    const senha = await bcrypt.hash("123456",8);
+    await Usuario.update({senha},{where:{id:userPCD.id_usuario}});
+    return res.send({message:"Senha resetada com sucesso!"});
+}

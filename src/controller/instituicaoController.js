@@ -163,9 +163,21 @@ exports.update = async (req,res) =>{
     return res.send({message:"Instituição atualizada com sucesso!"});
 }
 
+exports.resetPassword = async (req,res) => {
+    const {cnpj} = req.body;
+    const cnpjFormat =  cnpj.split(',');
+    const format = `${cnpjFormat[0]}.${cnpjFormat[1]}.${cnpjFormat[2]}`;
+    const findInst = await Instituicao.findOne({where:{cnpj:format}});
+    if(!findInst){
+        return res.send({message:"Instituição não encontrada!"});
+    }
+    const senha = await bcrypt.hash("123456",8);
+    await Usuario.update({senha},{where:{id:findInst.id_usuario}});
+    return res.send({message:"Senha resetada com sucesso!"});
+}
+
 exports.findOne = async (req, res) => {
     const {id} = req.body
-
     let response = {
         message: ''
     }
