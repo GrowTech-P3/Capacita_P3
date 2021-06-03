@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
         through: models.Usuario_tipo_deficiencia,
         foreignKey: 'id_usuario_pcd'
       })
+      Usuario_pcd.hasMany(models.Denuncias, {
+        foreignKey: 'id_usuario_pcd'
+      })
     }
   };
   Usuario_pcd.init({
