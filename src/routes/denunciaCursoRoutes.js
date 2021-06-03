@@ -5,7 +5,5 @@ module.exports = function(app) {
         .get(denunciaCurso.listAll)
         .post(authenticate, denunciaCurso.defineOne)
     app.route('/denunciaCursoAberta')
-    .get(authenticate, denunciaCurso.listAllOpen)
-
-
+        .get(authenticate, denunciaCurso.listAllOpen)
 }
