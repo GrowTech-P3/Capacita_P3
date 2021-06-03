@@ -33,6 +33,37 @@ exports.listAllOpen = async (req, res) => {
     res.send(denuncias)
 }
 
+exports.findOne = async (req, res) => {
+    const {id} = req.body
+
+    let response = {
+        message: ''
+    }
+
+    try {
+        const denuncia = await Denuncia.findOne({
+            where: { id },
+            include: [
+                { model: Curso, include: [
+                    {model: Instituicao}
+                ]},
+                { model: Usuario_pcd }
+            ]
+        })
+
+        if(denuncia) {
+            response.message = "Denuncia Localizada!"
+            response.curso = denuncia;
+        } else {
+            response.message = "Denuncia não Localizada!"
+        }
+
+    } catch (err) {
+        res.send(err)
+    }
+    res.send(response);
+}
+
 //CRIA DENUNCIA E DEFINE RELACIONAMENTO COM CURSO
 exports.defineOne = async (req, res) => {
     const {id_usuario_pcd, id_curso, descricao} = req.body

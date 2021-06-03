@@ -4,8 +4,10 @@ module.exports = function(app) {
     app.route('/denunciaCurso')
         .get(authenticate, denunciaCurso.listAll)
         .post(authenticate, denunciaCurso.defineOne)
-    app.route('/denunciaCursoAberta')
+    app.route('/denunciaCurso-aberta')
         .get(authenticate, denunciaCurso.listAllOpen)
-    app.route('/denunciaCursoPesquisa')
+    app.route('/denunciaCurso-busca')
+        .post(authenticate, denunciaCurso.findOne)
+    app.route('/denunciaCurso-pesquisa')
         .post(authenticate, denunciaCurso.searchAll)
 }
