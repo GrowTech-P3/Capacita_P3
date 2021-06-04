@@ -10,4 +10,8 @@ module.exports = function(app) {
         .post(authenticate, denunciaCurso.findOne)
     app.route('/denunciaCurso-pesquisa')
         .post(authenticate, denunciaCurso.searchAll)
+    app.route('/denunciaCurso-fechar')
+        .post(authenticate, denunciaCurso.autorizationDenunciaCursoClose)
+    app.route('/denunciaCurso-fechar-curso-inativo')
+        .post(authenticate, denunciaCurso.autorizationDenunciaCursoCloseCursoDisable)
 }

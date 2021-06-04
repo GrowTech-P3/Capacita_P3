@@ -126,3 +126,75 @@ exports.searchAll = async (req, res) => {
         res.send(err)
     })
 }
+
+// FECHAR DENUNCIACURSO
+exports.autorizationDenunciaCursoClose = async (req, res) => {
+    let {id} = req.body
+    let response = {
+        message: '',
+    }
+    
+    const aberto = false;
+    
+    try {
+        const denunciaBusca = await Denuncia.update({ aberto }, {
+            where: {
+                id
+            }
+        });
+    
+        if(denunciaBusca == 1) {
+            response.message = "Denuncia de Curso fechada com sucesso!"
+        } else {
+            response.message = "Denuncia de Curso não localizada!"
+        }
+    } catch (err) {
+        console.log(err)
+        return res.send(err)
+    }
+    
+    return res.send(response)
+
+}
+
+// FECHAR DENUNCIACURSO E DESABILITAR CURSO
+exports.autorizationDenunciaCursoCloseCursoDisable = async (req, res) => {
+    let {id, cursos} = req.body
+    let response = {
+        message: '',
+    }
+    
+    const aberto = false;
+    
+    try {
+        const denunciaBusca = await Denuncia.update({ aberto }, {
+            where: {
+                id
+            }
+        });
+    
+        const cursoBusca = await Curso.update({ ativo: cursos.ativo }, {
+            where: {
+                id: cursos.id
+            }
+        });
+    
+        if(denunciaBusca == 1 && cursoBusca == 1) {
+            response.message = "Denuncia de Curso fechada com sucesso! Curso Inativado!"
+        } else if (cursoBusca == 0) {
+            response.message = "Curso não localizado!"
+        } else if (denunciaBusca == 0) { 
+            response.message = "Denuncia não localizada!"
+        } else if (denunciaBusca == 0 && cursoBusca == 0) { 
+            response.message = "Denuncia de Curso e Curso não localizada!"
+        } else {
+            response.message = "Denuncia de Curso e Curso não localizada!"
+        }
+    } catch (err) {
+        console.log(err)
+        return res.send(err)
+    }
+    
+    return res.send(response)
+
+}
