@@ -2,6 +2,7 @@ const Curso         = require('../models').Curso
 const Instituicao   = require('../models').Instituicao
 const Denuncia      = require('../models').Denuncias
 const Usuario_pcd   = require('../models').Usuario_pcd
+const Usuario       = require('../models').Usuario
 
 const { Op }    = require('sequelize')
 
@@ -47,13 +48,16 @@ exports.findOne = async (req, res) => {
                 { model: Curso, include: [
                     {model: Instituicao}
                 ]},
-                { model: Usuario_pcd }
+                { model: Usuario_pcd, include: [
+                    {model: Usuario}
+                ]}
             ]
         })
 
         if(denuncia) {
             response.message = "Denuncia Localizada!"
-            response.curso = denuncia;
+            response.denunciaCurso = denuncia;
+            response.denunciaCurso.Usuario_pcd.Usuario.senha = "***" // EVITAR RETORNO DE SENHA
         } else {
             response.message = "Denuncia não Localizada!"
         }
