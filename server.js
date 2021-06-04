@@ -22,12 +22,14 @@ const routesInscricao           = require('./src/routes/inscricaoRoutes.js')
 const routesAdministrador       = require('./src/routes/administradorRoutes')
 const routesLogAdministrador    = require('./src/routes/logAdministradorRoutes')
 const routesDenunciaCurso       = require('./src/routes/denunciaCursoRoutes')
+const routesFinanceiro          = require("./src/routes/financeiroRoutes");
 
 //REPASSE DE INSTÂNCIA DO EXPRESS PARA AS ROTAS
 app.use(routesUsuario);
 app.use(routesAdministrador);
 app.use(routesLogAdministrador);
 app.use(routesUsuarioPcd);
+app.use(routesFinanceiro);
 routesInstituicao(app)
 routesEstados(app)
 routesUsuarioDeficiencia(app)
