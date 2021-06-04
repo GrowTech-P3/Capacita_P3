@@ -164,8 +164,9 @@ exports.autorizationDenunciaCursoCloseCursoDisable = async (req, res) => {
         message: '',
     }
     
-    const aberto = false;
-    
+    const aberto    = false
+    const ativo     = false
+
     try {
         const denunciaBusca = await Denuncia.update({ aberto }, {
             where: {
@@ -173,7 +174,7 @@ exports.autorizationDenunciaCursoCloseCursoDisable = async (req, res) => {
             }
         });
     
-        const cursoBusca = await Curso.update({ ativo: cursos.ativo }, {
+        const cursoBusca = await Curso.update({ ativo }, {
             where: {
                 id: cursos.id
             }
