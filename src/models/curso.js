@@ -26,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
         through:models.Denuncia_curso,
         foreignKey: 'id_curso'
       })
+      Curso.hasMany(models.Inscricao,{
+        foreignKey:'id_curso'
+      })
     }
   };
   Curso.init({
