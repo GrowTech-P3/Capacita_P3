@@ -10,12 +10,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Inscricao.belongsTo(models.Usuario_pcd,{
+        foreignKey:'id_usuario_pcd'
+      });
+      Inscricao.belongsTo(models.Curso,{
+        foreignKey:'id_curso'
+      })
     }
   };
   Inscricao.init({
-    id_usuario_pcd: DataTypes.INTEGER,
-    id_curso: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Inscricao',
