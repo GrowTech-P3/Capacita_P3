@@ -14,10 +14,18 @@ const getPayValue = async (req,res) =>{
     findInscri.map(index =>{
         const value = index.Curso.valor.split(/\D/);
         const result ={
-            curso : index.Curso.nome_curso,
-			usuarioPcd : index.Usuario_pcd.nome,
-			instituição : index.Curso.Instituicao.nome,
-			data_hora : index.createdAt,
+            curso :{
+                nome_curso: index.Curso.nome_curso,
+            }, 
+			usuarioPcd :{
+                 
+                nome: index.Usuario_pcd.nome,
+            }, 
+			instituicao :{
+
+                nome: index.Curso.Instituicao.nome,
+            },
+			dataHora : index.createdAt,
 			valor: value[3]
         }
         resultMap.push(result);
