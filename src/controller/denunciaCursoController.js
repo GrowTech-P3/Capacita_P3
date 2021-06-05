@@ -163,26 +163,38 @@ exports.autorizationDenunciaCursoClose = async (req, res) => {
 
 // FECHAR DENUNCIACURSO E DESABILITAR CURSO
 exports.autorizationDenunciaCursoCursoDisable = async (req, res) => {
-    let {id} = req.body
+    let {id, cursos} = req.body
     let response = {
         message: '',
     }
-
+    
+    const aberto    = false
     const ativo     = false
 
     try {
-
-        const cursoBusca = await Curso.update({ ativo }, {
+        const denunciaBusca = await Denuncia.update({ aberto }, {
             where: {
                 id
             }
         });
     
-        if(cursoBusca > 0) {
-            response.message = "Curso suspenso com sucesso!"
-        } else {
+        const cursoBusca = await Curso.update({ ativo }, {
+            where: {
+                id: cursos.id
+            }
+        });
+    
+        if(denunciaBusca == 1 && cursoBusca == 1) {
+            response.message = "Denuncia de Curso fechada com sucesso! Curso Inativado!"
+        } else if (cursoBusca == 0) {
             response.message = "Curso não localizado!"
-        } 
+        } else if (denunciaBusca == 0) { 
+            response.message = "Denuncia não localizada!"
+        } else if (denunciaBusca == 0 && cursoBusca == 0) { 
+            response.message = "Denuncia de Curso e Curso não localizada!"
+        } else {
+            response.message = "Denuncia de Curso e Curso não localizada!"
+        }
     } catch (err) {
         console.log(err)
         return res.send(err)
