@@ -12,6 +12,6 @@ module.exports = function(app) {
         .post(authenticate, denunciaCurso.searchAll)
     app.route('/denunciaCurso-fechar')
         .post(authenticate, denunciaCurso.autorizationDenunciaCursoClose)
-    app.route('/denunciaCurso-fechar-curso-inativo')
-        .post(authenticate, denunciaCurso.autorizationDenunciaCursoCloseCursoDisable)
+    app.route('/denunciaCurso-curso-inativo')
+        .post(authenticate, denunciaCurso.autorizationDenunciaCursoCursoDisable)
 }
