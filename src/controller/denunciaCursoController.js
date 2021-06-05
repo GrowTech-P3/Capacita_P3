@@ -180,7 +180,7 @@ exports.autorizationDenunciaCursoCursoDisable = async (req, res) => {
     
         const cursoBusca = await Curso.update({ ativo }, {
             where: {
-                id: cursos.id
+                id: cursos[0].id
             }
         });
     
