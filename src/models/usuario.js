@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       Usuario.hasOne(models.Administrador,{
         foreignKey:'id_usuario'
       })
+      Usuario.hasMany(models.Noticia, {
+        foreignKey: 'id_usuario'
+      })
       // Usuario.belongsTo(models.Instituicao)
       // Usuario.belongsTo(models.Forum_topico)
       // Usuario.belongsTo(models.Forum_resposta)
