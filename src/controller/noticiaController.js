@@ -31,10 +31,10 @@ exports.findOne = async (req, res) => {
         const noticia = await Noticia.findOne({
             where: { id },
             include: [
-                { model: Usuario, include: [
-                    { model: Instituicao },
-                    { model: Administrador }
-                ] }
+                {model: Usuario, include: [
+                    {model: Administrador},
+                    {model: Instituicao}
+                ]}
             ]
         })
     
