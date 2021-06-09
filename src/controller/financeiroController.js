@@ -36,6 +36,7 @@ const getPayValue = async (req, res) => {
 
 const getInstituicao = async (req, res) => {
     const { nome } = req.body;
+    console.log(nome);
     const inst = await Instituicao.findOne({
         where: { nome: nome },
         include: Curso
@@ -66,14 +67,14 @@ const getInstituicao = async (req, res) => {
         const value = index.Curso.valor.split(/\D/);
         const dados = {
             curso: {
-                nome: index.Curso.nome_curso
+                nome_curso: index.Curso.nome_curso
             },
             usuarioPCD: {
 
                 nome: index.Usuario_pcd.nome
             },
-            instituição: {
-                nome: instituicao.nome
+            instituicao: {
+                nome: nome
             },
             dataHora: index.createdAt,
             valor: value[3]
@@ -100,12 +101,12 @@ const getCurso = async (req, res) => {
         const value = cursos.valor.split(/\D/);
         const dados = {
             curso: {
-                nome: cursos.nome_curso
+                nome_curso: cursos.nome_curso
             },
             usuarioPCD: {
                 nome: index.Usuario_pcd.nome
             },
-            instituição: {
+            instituicao: {
                 nome: cursos.Instituicao.nome
             },
             dataHora: index.createdAt,
@@ -117,16 +118,16 @@ const getCurso = async (req, res) => {
 }
 
 const getCursoInst = async (req, res) => {
-    const {nome , nome_curso} = req.body;
+    const {curso, instituicao} = req.body;
 
     const findInst = await Instituicao.findOne({
         where:{
-            nome:nome
+            nome:instituicao.nome
         },
         include:{
             model:Curso,
             where:{
-                nome_curso: nome_curso
+                nome_curso: curso.nome_curso
             },
             include:{
                 model:Inscricao,
@@ -140,12 +141,12 @@ const getCursoInst = async (req, res) => {
             const value = index.valor.split(/\D/);
             const dados = {
                 curso: {
-                    nome: index.nome_curso
+                    nome_curso: index.nome_curso
                 },
                 usuarioPCD: {
                     nome: element.Usuario_pcd.nome
                 },
-                instituição: {
+                instituicao: {
                     nome: findInst.nome
                 },
                 dataHora: element.createdAt,
