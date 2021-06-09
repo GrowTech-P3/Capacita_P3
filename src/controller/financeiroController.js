@@ -11,7 +11,7 @@ const getPayValue = async (req, res) => {
             { model: Curso, include: Instituicao }
         ]
     });
-    findInscri.map(index => {
+    findInscri.forEach(index => {
         const value = index.Curso.valor.split(/\D/);
         const result = {
             curso: {
@@ -35,9 +35,9 @@ const getPayValue = async (req, res) => {
 }
 
 const getInstituicao = async (req, res) => {
-    const { instituicao } = req.body;
+    const { nome } = req.body;
     const inst = await Instituicao.findOne({
-        where: { nome: instituicao.nome },
+        where: { nome: nome },
         include: Curso
     });
     if (!inst || inst == "") {
@@ -84,9 +84,9 @@ const getInstituicao = async (req, res) => {
 }
 
 const getCurso = async (req, res) => {
-    const { curso } = req.body;
+    const { nome_curso } = req.body;
     const cursos = await Curso.findOne({
-        where: { nome_curso: curso.nome_curso },
+        where: { nome_curso: nome_curso },
         include: [
             { model: Instituicao },
             {
@@ -96,28 +96,65 @@ const getCurso = async (req, res) => {
         ]
     });
     const response =[];
-    for (let index = 0; index < cursos.Inscricaos.length; index++) {
+    cursos.Inscricaos.forEach(index=> {
         const value = cursos.valor.split(/\D/);
         const dados = {
             curso: {
                 nome: cursos.nome_curso
             },
             usuarioPCD: {
-                nome: cursos.Inscricaos[index].Usuario_pcd.nome
+                nome: index.Usuario_pcd.nome
             },
             instituição: {
                 nome: cursos.Instituicao.nome
             },
-            dataHora: cursos.Inscricaos[index].createdAt,
+            dataHora: index.createdAt,
             valor: value[3]
         }
         response.push(dados);
-    }
+    });
     return res.send(response);
 }
 
 const getCursoInst = async (req, res) => {
-    
+    const {nome , nome_curso} = req.body;
+
+    const findInst = await Instituicao.findOne({
+        where:{
+            nome:nome
+        },
+        include:{
+            model:Curso,
+            where:{
+                nome_curso: nome_curso
+            },
+            include:{
+                model:Inscricao,
+                include:UsuarioPcd
+            }
+        }
+    });
+    const response = [];
+    findInst.Cursos.forEach(index=>{
+        index.Inscricaos.forEach(element=>{
+            const value = index.valor.split(/\D/);
+            const dados = {
+                curso: {
+                    nome: index.nome_curso
+                },
+                usuarioPCD: {
+                    nome: element.Usuario_pcd.nome
+                },
+                instituição: {
+                    nome: findInst.nome
+                },
+                dataHora: element.createdAt,
+                valor: value[3]
+            }
+            response.push(dados);
+        });
+    });
+    return res.send(response);
 }
 
 
