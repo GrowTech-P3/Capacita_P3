@@ -6,6 +6,7 @@ const { Op }                = require("sequelize")
 
 exports.listAll = (req, res) => {
     Noticia.findAll({
+        where:{ativo:true},
         include: [
             { model: Usuario, include: [
                 { model: Instituicao },
