@@ -1,11 +1,11 @@
 {
   "development": {
-    "username": "sa",
-    "password": "SENHAsenha123",
+    "username": "root",
+    "password": "root",
     "database": "capacita",
     "host": "localhost",
-    "dialect": "mssql",
-    "port": "1433"
+    "dialect": "mysql",
+    "port": "3306"
   },
   "test": {
     "username": "sa",
