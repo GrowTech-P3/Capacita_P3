@@ -59,7 +59,7 @@ exports.findOne = (req, res) => {
 exports.login = async (req, res) => {
     const { email, senha } = req.body;
 
-    const user = await Usuario.findOne({ where: { email }});
+    const user = await Usuario.findOne({ where: { email },include:Administrador});
     if(!user){
         return res.json({message:"Email não encontrado"});
     }
@@ -73,7 +73,7 @@ exports.login = async (req, res) => {
     }
     const { id } = user;
     const resultUser = {
-        id: user.id,
+        id: user.Administrador.id_administrador,
         email: user.email,
         tipo: user.tipo,
         ativo: user.ativo,

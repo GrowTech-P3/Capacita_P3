@@ -2,9 +2,9 @@ const logAdministrador = require("../models/").Log_administrador;
 const Administrador = require("../models/").Administrador;
 
 const store = async (req, res) => {
-    const { id_administrador, atividade } = req.body;
+    const { administrador, logAtividade } = req.body;
     const data_hora = new Date();
-    const log = await logAdministrador.create({ id_administrador, atividade, data_hora });
+    const log = await logAdministrador.create({ id_administrador:administrador.idAdministrador, atividade:logAtividade, data_hora });
     return res.json(log);
 }
 
