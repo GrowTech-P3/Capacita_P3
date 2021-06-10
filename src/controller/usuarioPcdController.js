@@ -17,14 +17,14 @@ exports.findOne = async (req, res) => {
     const cpfFormat = cpf.split(",");
     const format = `${cpfFormat[0]}.${cpfFormat[1]}.${cpfFormat[2]}`
     const usuarioPCD = await UsuarioPcd.findOne({
-        where: { cpf:format },
+        where: { cpf: format },
         include: [
             { model: TipoDeficiencia },
             { model: Usuario }
         ]
     })
-    if(!usuarioPCD){
-        return res.send({message:"Usuário PCD não encontrado!"});
+    if (!usuarioPCD) {
+        return res.send({ message: "Usuário PCD não encontrado!" });
     }
     let deficiencia = [];
 
@@ -32,26 +32,26 @@ exports.findOne = async (req, res) => {
         deficiencia.push(index.id);
     })
     const response = {
-        message:"Usuário PCD localizado",
-        usuarioPCD:{
-            id:usuarioPCD.id,
+        message: "Usuário PCD localizado",
+        usuarioPCD: {
+            id: usuarioPCD.id,
             nome: usuarioPCD.nome,
-            telefone:usuarioPCD.telefone ,
-            endereco:usuarioPCD.endereco ,
+            telefone: usuarioPCD.telefone,
+            endereco: usuarioPCD.endereco,
             numero: usuarioPCD.numero,
             bairro: usuarioPCD.bairro,
             cidade: usuarioPCD.cidade,
             id_estado: usuarioPCD.id_estado,
             cep: usuarioPCD.cep,
             cpf: usuarioPCD.cpf,
-            ativo:usuarioPCD.ativo,
+            ativo: usuarioPCD.ativo,
             deficiencia
         },
-        usuario:{
-            email:usuarioPCD.Usuario.email,
-            tipo:usuarioPCD.Usuario.tipo,
-            ativo:usuarioPCD.Usuario.ativo
-        },   
+        usuario: {
+            email: usuarioPCD.Usuario.email,
+            tipo: usuarioPCD.Usuario.tipo,
+            ativo: usuarioPCD.Usuario.ativo
+        },
     }
     return res.send(response);
 }
@@ -63,6 +63,10 @@ exports.createOne = async (req, res) => {
     const userExists = await Usuario.findOne({ where: { email } });
     if (userExists) {
         return res.json({ message: "Email já cadastrado!" });
+    }
+    const cpfExists = await UsuarioPcd.findOne({ where: { cpf: format } });
+    if (cpfExists) {
+        return res.json({ message: "CPF já cadastrado!" });
     }
     const senha = await bcrypt.hash(password, 8);
     const ativo = true;
@@ -78,7 +82,7 @@ exports.createOne = async (req, res) => {
         id_estado,
         id_usuario: user.id,
         cep,
-        cpf:format,
+        cpf: format,
         ativo
     });
     const tiposDefiencias = [];
@@ -117,43 +121,43 @@ exports.createOne = async (req, res) => {
 }
 
 
-exports.remove = async (req,res) => {
-    const {cpf} = req.body;
+exports.remove = async (req, res) => {
+    const { cpf } = req.body;
     const cpfFormat = cpf.split(",");
     const format = `${cpfFormat[0]}.${cpfFormat[1]}.${cpfFormat[2]}`
-    const userPCD = await UsuarioPcd.findOne({where:{cpf:format}});
-    if(!userPCD){
-        return res.send({message:"Usuário não encontado!"});
+    const userPCD = await UsuarioPcd.findOne({ where: { cpf: format } });
+    if (!userPCD) {
+        return res.send({ message: "Usuário não encontado!" });
     }
-    const user = await Usuario.findOne({where:{id:userPCD.id_usuario}});
-    await userPCD.update({ativo:false});
-    await user.update({ativo:false});
-    return res.send({message:"Usuário deletado!"});
+    const user = await Usuario.findOne({ where: { id: userPCD.id_usuario } });
+    await userPCD.update({ ativo: false });
+    await user.update({ ativo: false });
+    return res.send({ message: "Usuário deletado!" });
 }
 
-exports.update = async (req,res) => {
-    const {nome,endereco,cidade,bairro,id_estado,cpf,telefone,cep,email,numero,ativo} = req.body;
+exports.update = async (req, res) => {
+    const { nome, endereco, cidade, bairro, id_estado, cpf, telefone, cep, email, numero, ativo } = req.body;
     const cpfFormat = cpf.split(",");
     const format = `${cpfFormat[0]}.${cpfFormat[1]}.${cpfFormat[2]}`
-    const userPCD = await UsuarioPcd.findOne({where:{cpf:format}});
-    if(!userPCD){
-        return res.send({message:"Usuário não encontrado"});
+    const userPCD = await UsuarioPcd.findOne({ where: { cpf: format } });
+    if (!userPCD) {
+        return res.send({ message: "Usuário não encontrado" });
     }
-    await userPCD.update({nome,endereco,cidade,bairro,id_estado,cpf:format,telefone,cep,numero,ativo});
-    await Usuario.update({email,ativo},{where:{id:userPCD.id_usuario}});
-    return res.send({message:"Usuário atualizado!"});
+    await userPCD.update({ nome, endereco, cidade, bairro, id_estado, cpf: format, telefone, cep, numero, ativo });
+    await Usuario.update({ email, ativo }, { where: { id: userPCD.id_usuario } });
+    return res.send({ message: "Usuário atualizado!" });
 }
 
 
-exports.resetPassword = async (req,res) =>{
-    const {cpf} = req.body;
+exports.resetPassword = async (req, res) => {
+    const { cpf } = req.body;
     const cpfFormat = cpf.split(",");
     const format = `${cpfFormat[0]}.${cpfFormat[1]}.${cpfFormat[2]}`
-    const userPCD = await UsuarioPcd.findOne({where:{cpf:format}});
-    if(!userPCD){
-        return res.send({message:"Usuário não localizado!"});
+    const userPCD = await UsuarioPcd.findOne({ where: { cpf: format } });
+    if (!userPCD) {
+        return res.send({ message: "Usuário não localizado!" });
     }
-    const senha = await bcrypt.hash("123456",8);
-    await Usuario.update({senha},{where:{id:userPCD.id_usuario}});
-    return res.send({message:"Senha resetada com sucesso!"});
+    const senha = await bcrypt.hash("123456", 8);
+    await Usuario.update({ senha }, { where: { id: userPCD.id_usuario } });
+    return res.send({ message: "Senha resetada com sucesso!" });
 }

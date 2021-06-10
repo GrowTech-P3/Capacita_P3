@@ -59,6 +59,10 @@ exports.createOne = async (req, res) => {
     if(emailExists){
         return res.json({message:"Email já utilizado!"});
     }
+    const cnpjExists = await Instituicao.findOne({where:{cnpj:format}});
+    if(cnpjExists){
+        return res.json({message:"CNPJ já utilizado!"});
+    }
     const user = await Usuario.create({email,senha,ativo,tipo});
     const instituicao = await Instituicao.create({
         nome,
