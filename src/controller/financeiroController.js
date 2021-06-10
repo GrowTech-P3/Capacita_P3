@@ -42,7 +42,8 @@ const getInstituicao = async (req, res) => {
         include: Curso
     });
     if (!inst || inst == "") {
-        return res.send({ message: "Instituição não encontrada!" });
+        const error = []
+        return res.send(error);
     }
     const request = [];
     inst.Cursos.forEach(element => {
@@ -97,6 +98,9 @@ const getCurso = async (req, res) => {
         ]
     });
     const response =[];
+    if(!cursos){
+        return res.send(response);
+    }
     cursos.Inscricaos.forEach(index=> {
         const value = cursos.valor.split(/\D/);
         const dados = {
@@ -136,6 +140,9 @@ const getCursoInst = async (req, res) => {
         }
     });
     const response = [];
+    if(!findInst){
+        return res.send(response);
+    }
     findInst.Cursos.forEach(index=>{
         index.Inscricaos.forEach(element=>{
             const value = index.valor.split(/\D/);
