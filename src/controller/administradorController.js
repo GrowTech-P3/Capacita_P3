@@ -82,6 +82,9 @@ const indexById = async (req,res) =>{
             model:Administrador
         }
     });  
+    if(!admin){
+        return res.json({message:"Administrador não encontrado!"});
+    }
     const result = {
         Usuario:{
             email:admin.email,
