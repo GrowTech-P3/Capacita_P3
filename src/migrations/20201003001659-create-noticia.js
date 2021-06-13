@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       txt_noticia: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       data_publicacao: {
         type: Sequelize.DATE

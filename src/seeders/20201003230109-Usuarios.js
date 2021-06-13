@@ -83,6 +83,22 @@ module.exports = {
         ativo: true,
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        email: 'mastercursos@master.com.br',
+        senha: await bcrypt.hash('123',8),
+        tipo: '1',
+        ativo: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        email: 'contato@contatocursos.com.br',
+        senha: await bcrypt.hash('123',8),
+        tipo: '1',
+        ativo: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], {});
     
